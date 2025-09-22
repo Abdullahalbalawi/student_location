@@ -1,0 +1,1319 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>تحديد موقع الطالب/ ـة</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  
+  
+<style>
+:root{
+      --bg1:#f7d36a; --bg2:#e6b637;
+      --brand:#f2c94c; --brand-hover:#e0b949;
+      --card:#ffffff; --line:#e5e7eb;
+      --text-strong:#111827; --text:#1f2937; --muted:#6b7280;
+      --radius:14px; --transition:all .25s ease; --shadow:0 4px 20px rgba(0,0,0,.08);
+      --safe-top: env(safe-area-inset-top); --safe-right: env(safe-area-inset-right);
+      --safe-bottom: env(safe-area-inset-bottom); --safe-left: env(safe-area-inset-left);
+    }
+    :root.dark{
+      --bg1:#0a0f1a; --bg2:#0c1628;
+      --brand:#f2c94c; --brand-hover:#ddb533;
+      --card:#0d1320; --line:#1b2535;
+      --text-strong:#eaf2ff; --text:#e5eef7; --muted:#a6b2c4;
+    }
+    *{box-sizing:border-box; margin:0; padding:0;}
+    html,body{height:100%;}
+    body{
+      background:linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%);
+      color:var(--text);
+      font-family:'Tajawal',system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      line-height:1.6; display:flex; flex-direction:column;
+      padding:max(0px,var(--safe-top)) max(0px,var(--safe-right)) max(0px,var(--safe-bottom)) max(0px,var(--safe-left));
+    }
+    header{
+      position:sticky; top:0; z-index:10; background:transparent; border-bottom:0; padding:1rem 1.25rem;
+    }
+    .header-content{display:flex; justify-content:center; align-items:center; gap:.6rem; max-width:1200px; margin:0 auto; width:100%;}
+    h1{
+      font-size:clamp(1.5rem, 2.8vw, 2.1rem);
+      margin:0; display:flex; align-items:center; gap:.6rem; font-weight:800; letter-spacing:-.3px;
+      color:var(--text-strong);
+    }
+    .header-content i,.section-title i,.btn i,.hint i,.bus-icon{ color:currentColor; }
+    .build-tag{ font-size:.8rem; font-weight:800; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:.15rem .5rem; }
+
+    .container{flex:1; max-width:1200px; margin:1rem auto; padding:0; width:100%;}
+    .card{
+      background:var(--card); border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow);
+      margin:0 1rem 1.2rem; position:relative;
+    }
+    .card-body{padding:1.2rem 1rem 1.4rem;}
+
+    /* ===== Switches (top-right) ===== */
+    .switch-group{ position:absolute; inset-inline-end:1rem; inset-block-start:1rem; display:flex; gap:.6rem; align-items:center; z-index:3; }
+    .theme-switch, .lang-switch, .btn-secondary{
+      background:#fff0; border:1px solid var(--line); border-radius:999px;
+      padding:.55rem .9rem; cursor:pointer; color:var(--text-strong); display:inline-flex; align-items:center; gap:.5rem; font-weight:700;
+    }
+    .theme-switch:hover, .lang-switch:hover, .btn-secondary:hover{background:#fff3; border-color: var(--brand); color:var(--text-strong);}
+
+    /* ===== Improved section title placement ===== */
+    .section-title-wrap{
+      position:sticky; top:calc(var(--safe-top) + .5rem);
+      z-index:2; background:var(--card);
+      box-shadow:0 1px 0 var(--line);
+    }
+    .section-subtitle{ color:var(--muted); font-weight:600; font-size:.98rem; margin-top:.25rem; text-align:center; } 
+    .section-title-wrap
+      display:flex; align-items:center; justify-content:center;
+      padding:.8rem 1rem .6rem; margin:0 .6rem 1rem; position:relative;
+    }
+    .section-title{
+      color:var(--text-strong);
+      font-size:clamp(1.25rem,2.6vw,1.7rem); font-weight:800;
+      display:flex; align-items:center; gap:.6rem;
+    }
+    .section-title-wrap::after{
+      content:""; position:absolute; inset-inline:0; bottom:-.2rem; height:2px; background:var(--line);
+      margin:0 .4rem;
+    }
+
+    .row{display:grid; grid-template-columns:repeat(2,minmax(240px,1fr)); gap:1rem; padding:0 1rem;}
+    label{
+      display:block; margin:.45rem 0 .35rem; font-weight:800; color:var(--text-strong);
+      font-size:clamp(1.02rem, 3vw, 1.35rem);
+    }
+
+    input,select{
+      width:100%; padding:1rem 1.05rem; border-radius:12px; border:1.5px solid var(--line);
+      font-size:clamp(1rem, 2.6vw, 1.06rem); transition:var(--transition); font-family:'Tajawal',sans-serif;
+      background:#f8fafc; color:var(--text);
+    }
+    input::placeholder{ color:var(--muted); }
+    input:focus,select:focus{ outline:none; border-color:var(--brand); box-shadow:0 0 0 3px rgba(242,201,76,.25); }
+
+    select{
+      -webkit-appearance:none; -moz-appearance:none; appearance:none;
+      background-image:linear-gradient(45deg, transparent 50%, #9aa3af 50%), linear-gradient(135deg, #9aa3af 50%, transparent 50%), linear-gradient(to right, transparent, transparent);
+      background-position: calc(100% - 18px) calc(1.2em), calc(100% - 13px) calc(1.2em), calc(100% - 2.5rem) 0.5rem;
+      background-size:5px 5px, 5px 5px, 1px 1.8rem; background-repeat:no-repeat;
+    }
+
+    .hint{color:var(--muted); font-size:.98rem; margin-top:.25rem; display:flex; align-items:center; gap:.45rem; font-weight:500; padding:0 1rem;}
+
+    /* ===== Buttons: improved look & spacing ===== */
+    .sp{display:flex; justify-content:space-between; gap:.8rem; align-items:center; flex-wrap:wrap; margin-top:1rem; padding:0 1rem;}
+    .toolbar{display:flex; gap:.6rem; flex-wrap:wrap;}
+    .btn{
+      display:inline-flex; align-items:center; gap:.5rem; justify-content:center;
+      padding:.9rem 1.2rem; border-radius:14px; border:1px solid transparent;
+      background:var(--brand); color:#1f2937; font-weight:900; cursor:pointer;
+      font-size:clamp(.95rem, 2.6vw, 1rem); transition:var(--transition); white-space:nowrap;
+      min-width: 44px; min-height: 44px;
+    }
+    .btn:hover{background:var(--brand-hover); transform:translateY(-1px);}
+    .btn:focus-visible{ outline:3px solid rgba(242,201,76,.45); outline-offset:2px; }
+    .btn.secondary{background:transparent; color:var(--text-strong); border:1.5px solid var(--brand);}
+    .btn.secondary:hover{ background:rgba(242,201,76,.18); }
+    .btn:disabled{opacity:0.6; cursor:not-allowed;}
+
+    .pill{padding:.7rem 1rem; border-radius:999px; border:1px solid var(--line); color:var(--muted); font-size:clamp(.92rem,2.4vw,1rem); display:flex; align-items:center; gap:.45rem; font-weight:700;}
+    .pill.success{color:#14532d; border-color:#22c55e; background:rgba(34,197,94,.18);}
+    .pill.error{color:#7f1d1d; border-color:#ef4444; background:rgba(239,68,68,.18);}
+
+    .required::after{content:" *"; color:#ef4444;}
+    .other-district-container{display:none; margin-top:.5rem;}
+    .other-district-container.visible{display:block;}
+    .coords-field{cursor:default!important;}
+    .coords-field:not([data-url]){color:var(--muted);}
+
+    .overlay{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.45); z-index:1000; }
+    .overlay.visible{ display:flex; }
+    .overlay .box{ background:var(--card); color:var(--text); border:2px solid var(--brand); border-radius:18px; padding:1.2rem 1.4rem; max-width:720px; margin:1rem; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,.25); }
+    .overlay .box h3{ margin:0 0 .5rem; font-size:1.25rem; color:var(--text-strong); }
+    .overlay .brand{ font-weight:800; margin-top:.25rem; color:var(--text-strong); }
+    .overlay .actions{ margin-top:.9rem; display:flex; justify-content:center; gap:.6rem; }
+    .overlay .actions .btn{ padding:.6rem 1rem; }
+
+    /* Mobile */
+    @media (max-width:820px){
+      .container{max-width:100%; width:100%; padding:0; margin:0;}
+      .card{border-radius:0; margin:0; border-left:none; border-right:none; box-shadow:none;}
+      .card-body{padding:calc(1rem + var(--safe-top)) .6rem 1rem;}
+      .row{grid-template-columns:1fr; gap:.9rem; padding:0 .6rem;}
+      .hint{padding:0 .6rem;}
+      .switch-group{inset-inline-end:.6rem; inset-block-start:.6rem; gap:.45rem;}
+      label{font-size:clamp(1.08rem, 3.8vw, 1.45rem);}
+      .btn{padding:1rem 1.2rem;}
+      #status{width:100%; justify-content:center; margin-top:.4rem;}
+    }
+    @media (max-width: 480px){
+      .switch-group{ gap:.4rem; }
+      .switch-group button{ font-size:0; padding:.55rem .65rem; }
+      .switch-group button i{ font-size:1.25rem; margin:0; }
+    }
+
+    html,body{overflow-x:hidden;}
+
+    /* Dark input backgrounds */
+    :root.dark { --field-bg:#1a1d2b; --field-hover:#222b3d; --field-focus:#2c3b55; }
+    input, select { background: var(--field-bg); color: var(--text); }
+    input:hover, select:hover { background: var(--field-hover); }
+    input:focus, select:focus { background: var(--field-focus); border-color: var(--brand); box-shadow:0 0 0 3px rgba(242,201,76,.25); outline:none; }
+
+    /* Modal */
+    .modal{ display:none; position:fixed; inset:0; z-index:1000; background:rgba(0,0,0,.45); }
+    .modal-content{ background:var(--card); color:var(--text); width:min(560px, 92%); margin:8vh auto; border-radius:16px; border:1px solid var(--line); box-shadow:var(--shadow); padding:1.2rem 1rem 1.4rem; position:relative;}
+    .modal-title{ font-size:clamp(1.2rem, 2.6vw, 1.6rem); margin:0 0 .6rem; font-weight:800; color:var(--text-strong); }
+    .help-list{ margin:.4rem 1.2rem 0; line-height:1.9; }
+    .close{ position:absolute; inset-inline-start:.8rem; inset-block-start:.5rem; background:transparent; border:0; font-size:1.8rem; cursor:pointer; color:var(--muted); }
+    .close:hover{ color:var(--text-strong); }
+    :root.dark .modal{ background:rgba(0,0,0,.6); }
+
+    .tabs{ display:flex; gap:.5rem; margin:.3rem 0 1rem; }
+    .tab-btn{ padding:.45rem .8rem; border:1px solid var(--line); border-radius:999px; background:#fff0; color:var(--text-strong); cursor:pointer; }
+    .tab-btn.tab-active{ background:var(--brand); border-color:var(--brand); color:#1f2937; }
+    .tab-panel{ margin-top:.4rem; }
+    #faqList .qa{ margin:.6rem 0; }
+    #faqList .q{ font-weight:800; color:var(--text-strong); }
+    #faqList .a{ color:var(--text); margin:.2rem 0 0 .2rem; }
+
+    /* Footer */
+    .app-footer{ margin:1rem auto 1.2rem; padding:.8rem 1rem; max-width:1200px; width:100%; text-align:center; color:var(--muted); }
+    .app-footer .contact{ margin-top:.35rem; }
+    .app-footer a{ color:inherit; text-decoration:underline dotted; }
+    .app-footer a:hover{ text-decoration:underline; }
+  
+/* === Override to make the second bus icon identical in size/color === */
+.build-tag{ font-size:inherit !important; color:inherit !important; border:0 !important; padding:0 !important; }
+
+
+.card.hidden { display: none; }
+/* Contact box inside success overlay */
+.contact-box {
+  margin: 1rem auto;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  text-align: center;
+  max-width: 300px;
+}
+.contact-box p {
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+}
+.contact-box i {
+  margin-left: 0.5rem;
+  color: var(--brand);
+}
+
+</style>
+<style>
+/* ===== Override: make main header non-sticky ===== */
+header{ position:relative !important; top:auto !important; z-index:auto !important; box-shadow:none !important; }
+/* Keep only inner section title sticky */
+.section-title-wrap{ position:sticky !important; top:.5rem !important; z-index:5 !important; background:var(--card); box-shadow:0 1px 0 var(--line); }
+</style>
+<style>
+/* ===== Override: remove sticky from section title as well ===== */
+.section-title-wrap{ position:relative !important; top:auto !important; z-index:auto !important; box-shadow:none !important; }
+</style>
+<style>
+/* === Simplified Dark Footer === */
+.app-footer {
+  background: #222;
+  color: #eee;
+  padding: 1.2rem .8rem;
+  text-align: center;
+  font-size: .9rem;
+}
+.app-footer a {
+  color: #ffd800;
+  text-decoration: none;
+  margin: 0 .5rem;
+}
+.app-footer a:hover {
+  text-decoration: underline;
+}
+.footer-contact, .footer-social {
+  margin-top: .6rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-rights {
+  font-weight: 600;
+  margin-bottom: .5rem;
+}
+
+/* === تعديلات جديدة === */
+
+/* جعل الأزرار كلها بنفس الحجم */
+.btn {
+  min-width: 120px; /* عرض موحّد */
+  min-height: 48px; /* ارتفاع موحّد */
+}
+
+/* الحالة العادية لزر الإرسال */
+#saveBtn {
+  background: var(--brand);
+  color: #1f2937;
+}
+
+/* زر الإرسال عند اكتمال البيانات */
+#saveBtn.active {
+  background: #22c55e !important; /* أخضر */
+  color: #fff !important;
+}
+
+
+/* === تحسين الاستجابة للهواتف الصغيرة جداً === */
+@media (max-width: 480px) {
+  body {
+    font-size: 15px; /* تكبير النص قليلاً لسهولة القراءة */
+  }
+
+  .row {
+    grid-template-columns: 1fr !important; /* حقل واحد لكل صف */
+    gap: 0.8rem;
+    padding: 0 .5rem;
+  }
+
+  label {
+    font-size: 1rem; /* حجم خط مناسب */
+  }
+
+  input, select {
+    padding: 0.9rem 1rem; /* زيادة مساحة النقر */
+    font-size: 1rem;
+  }
+
+  .btn {
+    width: 100%;        /* الأزرار تأخذ العرض كامل */
+    min-height: 52px;   /* ارتفاع أكبر لسهولة اللمس */
+    font-size: 1.05rem; /* حجم خط أوضح */
+  }
+
+  .toolbar {
+    flex-direction: column; /* ترتيب رأسي للأزرار */
+    width: 100%;
+    gap: 0.7rem;
+  }
+
+  .toolbar .btn {
+    justify-content: center; /* تمركز النصوص */
+  }
+
+  #status {
+    font-size: 0.95rem;
+    margin-top: 0.6rem;
+    text-align: center;
+    width: 100%;
+  }
+
+  header h1 {
+    font-size: 1.3rem;
+    text-align: center;
+    flex-wrap: wrap;
+    line-height: 1.6;
+  }
+}
+
+
+/* === توحيد مستوى أيقونات الباص في الهيدر === */
+.bus-icon {
+  font-size: 1.5em; /* حجم موحّد */
+  vertical-align: middle; /* محاذاة وسطية */
+  line-height: 1;
+}
+.build-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em !important; /* نفس حجم الباص */
+  color: inherit !important;
+  border: 0 !important;
+  padding: 0 !important;
+  margin: 0 0 0 .3rem; /* مسافة بسيطة لليمين */
+}
+
+
+/* === تحسين محاذاة أيقونات الباص + زر العودة لأعلى === */
+.header-content{display:flex;justify-content:center;align-items:center;gap:1rem;}
+.header-content h1{display:flex;align-items:center;gap:1rem;font-weight:800;font-size:clamp(1.4rem,2.8vw,2rem);}
+.header-content .bus-icon{font-size:2rem;line-height:1;vertical-align:middle;}
+
+#backToTop{display:none;position:fixed;bottom:20px;inset-inline-end:20px;z-index:99;background:var(--brand);color:#1f2937;border:0;border-radius:50%;padding:.8rem;font-size:1.2rem;cursor:pointer;box-shadow:var(--shadow);transition:all .3s ease;}
+#backToTop:hover{background:var(--brand-hover);}
+
+
+/* === Custom Splash Screen === */
+#customSplash {
+  position: fixed;
+  inset: 0;
+  background: var(--brand, #f2c94c);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  font-family: "Tajawal", sans-serif;
+  color: #1f2937;
+}
+#customSplash img {
+  width: 96px;
+  height: 96px;
+  margin-bottom: 1rem;
+}
+#customSplash h1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+@media (prefers-color-scheme: dark) {
+  #customSplash {
+    background: #1f2937;
+    color: #f2f2f2;
+  }
+}
+
+
+/* Loader animation inside Splash */
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #1f2937;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  animation: spin 1s linear infinite;
+  margin-top: 1rem;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@media (prefers-color-scheme: dark) {
+  .loader {
+    border: 4px solid #444;
+    border-top: 4px solid #f2f2f2;
+  }
+}
+
+
+/* === Install Overlay (Light Gray) === */
+#installOverlay { position: fixed; inset: 0; background: #f5f5f5; display: none;
+  align-items: center; justify-content: center; z-index: 9999; text-align: center; padding: 1rem; }
+#installOverlay .overlay-content { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+#installOverlay #installBtn { background: transparent; border: none; cursor: pointer; }
+#installOverlay #installBtn img { width: 136px; height: 136px; transition: transform .2s ease; }
+#installOverlay #installBtn img:hover { transform: scale(1.12); }
+#installOverlay .hint { font-weight: 700; color: #1f2937; }
+/* Header title */
+.app-header { text-align: center; padding: .5rem 1rem; }
+.app-title { font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0; }
+
+</style>
+  <link rel="manifest" href="manifest.json">
+  
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f2c94c">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1f2937">
+
+
+<!-- iOS Splash / App style -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+  <link rel="icon" type="image/png" href="favicon.png">
+</head>
+<body>
+<div id="installOverlay" aria-hidden="true">
+  <div class="overlay-content">
+    <button id="installBtn" aria-label="تثبيت التطبيق">
+      <img src="icon-192.png" alt="ثبّت التطبيق">
+    </button>
+    <p class="hint">اضغط على الأيقونة لتثبيت التطبيق</p>
+  </div>
+</div>
+<div id="appRoot" style="display:none;">
+<header class="app-header"><h1 class="app-title">تحديد موقع الطالب/ـة</h1></header>
+
+
+<div id="customSplash">
+  <img src="icon-192.png" alt="App Icon">
+  <h1>مشروع النقل المدرسي بالعلا</h1>
+</div>
+
+  <header>
+    <div class="header-content">
+      <h1>
+        <i class="fa-solid fa-bus bus-icon" aria-hidden="true"></i>
+        تحديد موقع الطالب/ ـة
+        <span class="build-tag"><i class="fa-solid fa-bus bus-icon" aria-hidden="true"></i></span>
+      </h1>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card" aria-label="نموذج تحديد الموقع">
+      <div class="switch-group">
+        <button id="langToggle" class="lang-switch" type="button" title="تبديل اللغة" aria-label="تبديل اللغة">
+          <i class="fas fa-globe"></i> <span id="btnLangText">العربية / English</span>
+        </button>
+        <button id="themeToggle" class="theme-switch" type="button" title="تبديل الوضع" aria-label="تبديل الوضع">
+          <i id="themeIcon" class="fas fa-moon"></i> <span id="btnThemeText">تبديل</span>
+        </button>
+        <button type="button" id="helpBtn" class="btn-secondary" aria-label="تعليمات">
+          <i class="fas fa-question-circle"></i><span id="btnHelpText">تعليمات</span>
+        </button>
+      </div>
+
+      <div class="card-body">
+        <!-- Improved centered form title -->
+        <div class="section-title-wrap">
+          <h2 class="section-title"><i class="fas fa-user-graduate"></i> <span id="formTitle">معلومات الطالب</span></h2>
+          <div class="section-subtitle" id="formSubtitle">يرجى تعبئة البيانات ثم تحديد الموقع قبل الإرسال</div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="studentName" class="required">اسم الطالب/ ـة</label>
+            <input id="studentName" placeholder="مثال: محمد أحمد" autocomplete="name" />
+          </div>
+          <div>
+            <label for="gradeLevel" class="required">المرحلة الدراسية</label>
+            <select id="gradeLevel"></select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="contactNumber" class="required">رقم التواصل</label>
+            <input id="contactNumber" inputmode="tel" placeholder="05XXXXXXXX" autocomplete="tel" />
+            <div class="hint" id="phoneHint"><i class="fas fa-circle-info"></i> يرجى إدخال رقم الجوال بصيغة صحيحة.</div>
+          </div>
+          <div>
+            <label for="schoolName" class="required">اسم المدرسة</label>
+            <select id="schoolName"></select>
+            <div id="otherSchoolContainer" class="other-district-container">
+              <input type="text" id="otherSchool" placeholder="أدخل اسم المدرسة" />
+            </div>
+            <div class="hint" id="schoolsHint"><i class="fas fa-circle-info"></i> اختر اسم المدرسة من القائمة.</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="district" class="required">الحي</label>
+            <select id="district"></select>
+            <div id="otherDistrictContainer" class="other-district-container">
+              <input type="text" id="otherDistrict" placeholder="أدخل اسم الحي" />
+            </div>
+          </div>
+          <div>
+            <label for="coords" class="required">الموقع الحالي (GPS)</label>
+            <input id="coords" class="coords-field" readonly placeholder="اضغط (تحديد الموقع الحالي) للحصول على الإحداثيات" title="سيتم عرض الإحداثيات هنا بعد تحديد الموقع" />
+            <div class="hint"><i class="fas fa-circle-info"></i> يجب تحديد الموقع قبل إرسال البيانات.</div>
+          </div>
+        </div>
+
+        <div class="sp">
+          <div class="toolbar">
+            <button class="btn" id="saveBtn" aria-label="إرسال البيانات"><i class="fas fa-paper-plane"></i> <span id="btnSaveText">إرسال البيانات</span></button>
+            <button class="btn secondary" id="locateBtn" type="button" aria-label="تحديد الموقع الحالي"><i class="fas fa-location-dot"></i> <span id="btnLocateText">تحديد الموقع الحالي</span></button>
+            <button class="btn secondary" id="resetBtn" type="button" aria-label="إعادة تعيين"><i class="fas fa-rotate-right"></i> <span id="btnResetText">إعادة تعيين</span></button>
+          </div>
+          <span id="status" class="pill"><i class="fas fa-circle-info"></i> املأ جميع الحقول المطلوبة</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Success Overlay -->
+  <div id="successOverlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+    <div class="box">
+      <h3 id="successTitle"><i class="fas fa-circle-check"></i> <span class="thanks"></span></h3>
+      <p class="line1"></p>
+      <div class="brand"><i class="fa-solid fa-bus"></i> <span class="brandText"></span></div>
+      <div class="contact-box">
+        <p><i class="fas fa-phone"></i> +966550463371</p>
+        <p><i class="fas fa-envelope"></i> albalawiaa@seitco.com.sa</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn" id="closeSuccess"><i class="fas fa-check"></i> OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help Modal -->
+  <div id="helpModal" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+      <button id="closeHelp" class="close" aria-label="إغلاق">&times;</button>
+      <h2 id="helpTitle" class="modal-title" data-i18n="title">تعليمات الاستخدام</h2>
+
+      <div class="tabs">
+        <button class="tab-btn tab-active" data-tab="howto" data-i18n="tab_howto">طريقة الاستخدام</button>
+        <button class="tab-btn" data-tab="faq" data-i18n="tab_faq">الأسئلة الشائعة</button>
+      </div>
+
+      <div class="tab-panel" data-panel="howto">
+        <ul id="howtoList" class="help-list">
+          <!-- سيُعاد توليد العناصر حسب اللغة عبر renderHelp() -->
+        </ul>
+        <hr/>
+        <div class="help-contact">
+          <p><strong data-i18n="contact">للتواصل</strong></p>
+          <p><a href="tel:+966550463371"><span id="footerPhoneTxt">+966550463371</span></a></p>
+          <p><a href="mailto:albalawiaa@seitco.com.sa"><span id="footerEmailTxt">albalawiaa@seitco.com.sa</span></a></p>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-panel="faq" style="display:none;">
+        <div id="faqList">
+          <!-- سيتم توليد العناصر حسب اللغة -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Improved bilingual footer -->
+  
+<footer class="app-footer">
+  <div class="footer-inner">
+    <p class="footer-rights"><span id="footerRights">نظام تحديد موقع الطالب - جميع الحقوق محفوظة © 2025</span></p>
+    <div class="footer-contact">
+      <a href="mailto:albalawiaa@seitco.com.sa"><span id="footerEmailTxt"><i class="fas fa-envelope"></i> albalawiaa@seitco.com.sa</span></a>
+      <a href="tel:+966550463371"><span id="footerPhoneTxt"><i class="fas fa-phone"></i> +966550463371</span></a>
+    </div>
+    <div class="footer-social">
+      <a href="https://wa.me/966550463371" target="_blank"><i class="fab fa-whatsapp"></i> <span id="footerWhatsTxt">واتساب</span></a>
+      <a href="https://maps.app.goo.gl/hSaoMcRPdhV5LbQ97" target="_blank"><i class="fas fa-location-dot"></i> <span id="footerMapTxt">الموقع</span></a>
+    </div>
+  </div>
+</footer>
+
+
+  
+  
+<script>
+const $ = (s)=>document.querySelector(s);
+
+  const STRINGS = {
+    ar: { app_title: "تحديد موقع الطالب/ ـة", section_student_info: "معلومات الطالب", section_student_subtitle: "يرجى تعبئة البيانات ثم تحديد الموقع قبل الإرسال",
+      studentName_label: "اسم الطالب/ ـة", gradeLevel_label: "المرحلة الدراسية",
+      contactNumber_label: "رقم التواصل", schoolName_label: "اسم المدرسة",
+      district_label: "الحي", coords_label: "الموقع الحالي (GPS)",
+      coords_placeholder: "اضغط (تحديد الموقع الحالي) للحصول على الإحداثيات",
+      hint_phone: "يرجى إدخال رقم الجوال بصيغة صحيحة.",
+      hint_schools_default: "اكتب جزءًا من الاسم لعرض الاقتراحات.",
+      btn_save: "إرسال البيانات", btn_locate: "تحديد الموقع الحالي", btn_reset: "إعادة تعيين",
+      status_ready: "جاهز للإرسال", status_fill_required: "املأ جميع الحقول المطلوبة",
+      geo_not_supported: "المتصفح لا يدعم تحديد الموقع", locating: "جارٍ تحديد الموقع...",
+      located_ok: "تم تحديد الموقع ووضع الإحداثيات في الحقل",
+      locate_error: "تعذر تحديد موقعك. تأكد من تفعيل خدمة الموقع",
+      gas_not_set: "لم يتم ضبط رابط GAS.", load_ok: (n)=> `تم تحميل ${n} عنصرًا.`,
+      load_none: "لا توجد بيانات.", load_fail: "تعذّر تحميل البيانات",
+      save_check_only: "تم التحقق من البيانات (الإرسال إلى GAS غير مفعّل).",
+      saving: "جارٍ الإرسال...", saved: "تم الإرسال بنجاح", save_failed: "فشل في الإرسال",
+      reset_done: "تمت إعادة التعيين", ping_ok: (m)=> `اتصال ناجح: ${m || 'OK'}`,
+      ping_bad: "الاتصال تم لكن الاستجابة غير صحيحة.", ping_fail: "تعذر الاتصال بـ GAS",
+      location_required: "يجب تحديد الموقع قبل الإرسال",
+      success_thanks: "شكراً لكم، نسعد بخدمتكم",
+      success_line1: "الشركة السعودية الإماراتية للنقل المتكامل",
+      success_brand: "مشروع النقل المدرسي بالعلا",
+      footer_rights: "نظام تحديد موقع الطالب - جميع الحقوق محفوظة © 2025",
+      footer_contact: "للتواصل", btn_help: "تعليمات", btn_theme: "تبديل", btn_lang_label: "العربية / English", btn_ok: "حسنًا"
+    },
+    en: { app_title: "Student Location", section_student_info: "Student Information", section_student_subtitle: "Please fill the fields then capture location before submitting",
+      studentName_label: "Student Name", gradeLevel_label: "Grade Level",
+      contactNumber_label: "Contact Number", schoolName_label: "School Name",
+      district_label: "District", coords_label: "Current Location (GPS)",
+      coords_placeholder: "Click (Get Current Location) to obtain coordinates",
+      hint_phone: "Please enter a valid mobile number.",
+      hint_schools_default: "Type part of the name to see suggestions.",
+      btn_save: "Send Data", btn_locate: "Get Current Location", btn_reset: "Reset",
+      status_ready: "Ready to send", status_fill_required: "Please fill all required fields",
+      geo_not_supported: "Geolocation is not supported", locating: "Locating...",
+      located_ok: "Location detected and coordinates set",
+      locate_error: "Unable to detect your location. Please enable location services",
+      gas_not_set: "GAS endpoint is not configured.", load_ok: (n)=> `Loaded ${n} items.`,
+      load_none: "No data found.", load_fail: "Failed to load data",
+      save_check_only: "Data validated (GAS send is disabled).", saving: "Sending...",
+      saved: "Sent successfully", save_failed: "Send failed", reset_done: "Form reset",
+      ping_ok: (m)=> `Connection OK: ${m || 'OK'}`, ping_bad: "Connected but response invalid.",
+      ping_fail: "Failed to reach GAS",
+      location_required: "Location is required before sending",
+      success_thanks: "Thank you — We're happy to serve you",
+      success_line1: "Saudi–Emirati Integrated Transport Company",
+      success_brand: "AlUla School Transport Project",
+      footer_rights: "Student Location System — All rights reserved © 2025",
+      footer_contact: "Contact", btn_help: "Help", btn_theme: "Toggle", btn_lang_label: "English / العربية", btn_ok: "OK"
+    }
+  };
+
+  let currentLang = localStorage.getItem("lang") || "ar";
+  function setDirByLang(lang){ const root=document.documentElement; root.lang=lang; root.dir=(lang==='ar'?'rtl':'ltr'); }
+
+  const gradeLevels = [
+    { value: "", label_ar: "اختر المرحلة", label_en: "Select grade", disabled: true },
+    { value: "elem", label_ar: "الابتدائية", label_en: "Elementary" },
+    { value: "inter", label_ar: "المتوسطة", label_en: "Intermediate" },
+    { value: "sec", label_ar: "الثانوية", label_en: "Secondary" }
+  ];
+  function updateGradeLevels(lang){
+    const sel = document.getElementById("gradeLevel");
+    const prev = sel.value;
+    sel.innerHTML = gradeLevels.map(g => {
+      const lbl = (lang==='ar') ? g.label_ar : g.label_en;
+      const attrs = [`value="${g.value}"`, g.disabled ? "disabled selected" : ""].join(" ").trim();
+      return `<option ${attrs}>${lbl}</option>`;
+    }).join("");
+    if (gradeLevels.some(g => g.value === prev)) sel.value = prev;
+  }
+
+  const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbyYYXcnfLBhM4fbV0ofXSOQS3D7TR1Xaft8sCha7Qrl2ShIh6sk2NmyLoX-CNGJlkRuBw/exec";
+
+  let schoolsBilingual = [];
+  let districtsBilingual = [];
+
+  const FALLBACK_SCHOOLS = [
+    { ar: "ابتدائية العلا الأولى", en: "AlUla Elementary 1" },
+    { ar: "متوسطة العلا",        en: "AlUla Intermediate" },
+    { ar: "ثانوية العلا",        en: "AlUla Secondary" }
+  ];
+  const FALLBACK_DISTRICTS = [
+    { code: "D01", ar: "العذيب",     en: "Al-Adheeb" },
+    { code: "D02", ar: "مغيراء",     en: "Mughayra" },
+    { code: "D03", ar: "العقير",     en: "Al-Uqayr" }
+  ];
+
+  function updateSchoolsSelect(lang){
+    const sel = document.getElementById("schoolName");
+    if(!sel) return;
+    const prev = sel.value;
+    const placeholder = (lang==='ar') ? "اختر المدرسة" : "Select school";
+    const names = (lang==='ar') ? schoolsBilingual.map(s=>s.ar) : schoolsBilingual.map(s=>s.en || s.ar);
+
+    const options = ['<option value="" disabled selected>'+placeholder+'</option>']
+      .concat(
+        names.filter(Boolean).map(n => {
+          const val = String(n).replace(/"/g,'&quot;');
+          const label = String(n).replace(/</g,'&lt;');
+          return '<option value="'+val+'">'+label+'</option>';
+        })
+      );
+
+    options.push((lang==='ar')
+      ? '<option value="other">أخرى (حدد اسم المدرسة)</option>'
+      : '<option value="other">Other (specify)</option>'
+    );
+
+    sel.innerHTML = options.join("");
+    if (names.includes(prev)) sel.value = prev;
+  }
+
+  function updateDistricts(lang){
+    const sel = document.getElementById("district");
+    const prev = sel.value;
+    const opts = (lang==='ar')
+      ? [{code:"", label:"اختر الحي", disabled:true}].concat(districtsBilingual.map(d => ({code:d.code, label:d.ar||d.code}))).concat([{code:"other", label:"أخرى (حدد اسم الحي)"}])
+      : [{code:"", label:"Select district", disabled:true}].concat(districtsBilingual.map(d => ({code:d.code, label:d.en||d.code}))).concat([{code:"other", label:"Other (specify)"}]);
+    sel.innerHTML = opts.map(o => {
+      const attrs = [`value="${o.code}"`, o.disabled ? "disabled selected" : ""].join(" ").trim();
+      return `<option ${attrs}>${o.label}</option>`;
+    }).join("");
+    if (opts.some(o => o.code === prev)) sel.value = prev;
+  }
+
+  async function fetchBilingualSchools(){
+    if (!GAS_ENDPOINT || GAS_ENDPOINT.includes("PUT_YOUR_GAS_WEBAPP_URL_HERE")) return [];
+    try {
+      const res = await fetch(GAS_ENDPOINT, { method:"POST", body: JSON.stringify({ action:"list_schools_bilingual" }) });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      if (!data?.ok || !Array.isArray(data.schools)) throw new Error("Invalid schools payload");
+      return data.schools.map(s => ({ ar: s.ar || "", en: s.en || "" }));
+    } catch(e){
+      console.warn("Schools fetch failed, using fallback.", e);
+      return FALLBACK_SCHOOLS;
+    }
+  }
+  async function fetchBilingualDistricts(){
+    if (!GAS_ENDPOINT || GAS_ENDPOINT.includes("PUT_YOUR_GAS_WEBAPP_URL_HERE")) return [];
+    try {
+      const res = await fetch(GAS_ENDPOINT, { method:"POST", body: JSON.stringify({ action:"list_districts_bilingual" }) });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      if (!data?.ok || !Array.isArray(data.districts)) throw new Error("Invalid districts payload");
+      return data.districts.map(d => ({ code: d.code || d.value || "", ar: d.ar || d.label_ar || "", en: d.en || d.label_en || "" }));
+    } catch(e){
+      console.warn("Districts fetch failed, using fallback.", e);
+      return FALLBACK_DISTRICTS;
+    }
+  }
+
+  async function ensureDataLoaded(){
+    const S = STRINGS[currentLang];
+    const hint = document.getElementById("schoolsHint");
+    try{
+      const now = Date.now();
+      const cache = JSON.parse(localStorage.getItem("bilingual_cache") || "{}");
+      if (cache.timestamp && (now - cache.timestamp) < 12*60*60*1000 && Array.isArray(cache.schools) && Array.isArray(cache.districts)){
+        schoolsBilingual = cache.schools; districtsBilingual = cache.districts;
+      } else {
+        const [sch, dis] = await Promise.all([fetchBilingualSchools(), fetchBilingualDistricts()]);
+        schoolsBilingual = sch; districtsBilingual = dis;
+        localStorage.setItem("bilingual_cache", JSON.stringify({ timestamp: now, schools: sch, districts: dis }));
+      }
+      updateSchoolsSelect(currentLang);
+      updateDistricts(currentLang);
+      if (hint){ const ic = hint.querySelector('i')?.outerHTML||''; const count = (schoolsBilingual?.length||0) + (districtsBilingual?.length||0); hint.innerHTML = `${ic} ${S.load_ok(count)}`; }
+    }catch(e){
+      console.error(e);
+      if (hint){ const ic = hint.querySelector('i')?.outerHTML||''; hint.innerHTML = `${ic} ${S.load_fail}: ${e.message}`; }
+    }
+  }
+
+  function setLang(lang){
+
+  // === Footer i18n ===
+  try {
+    const rights = document.getElementById('footerRights');
+    if(rights){
+      rights.textContent = (lang === 'ar'
+        ? 'نظام تحديد موقع الطالب - جميع الحقوق محفوظة © 2025'
+        : 'Student Location System — All rights reserved © 2025');
+    }
+    const mapTxt = document.getElementById('footerMapTxt');
+    if(mapTxt){ mapTxt.textContent = (lang === 'ar' ? 'الموقع' : 'Map'); }
+    const waTxt = document.getElementById('footerWhatsTxt');
+
+    const emailTxt = document.getElementById('footerEmailTxt');
+    if(emailTxt){ emailTxt.textContent = (lang === 'ar' ? 'البريد الإلكتروني' : 'Email'); }
+    const phoneTxt = document.getElementById('footerPhoneTxt');
+    if(phoneTxt){ phoneTxt.textContent = (lang === 'ar' ? 'الهاتف' : 'Phone'); }
+
+    if(waTxt){ waTxt.textContent = (lang === 'ar' ? 'واتساب' : 'WhatsApp'); }
+  } catch(e) {}
+    currentLang = lang; localStorage.setItem("lang", lang); setDirByLang(lang);
+    const S = STRINGS[lang];
+    const h1=document.querySelector('h1'); if(h1){ const bus=h1.querySelector('.bus-icon')?.outerHTML||''; h1.innerHTML=`${bus} ${S.app_title} <span class="build-tag"><i class="fa-solid fa-bus bus-icon" aria-hidden="true"></i></span>`; }
+    const st=document.getElementById('formTitle'); if(st){ st.textContent = S.section_student_info; }
+    const sst=document.getElementById('formSubtitle'); if(sst){ sst.textContent = S.section_student_subtitle; }
+    const setLabel=(fid,txt)=>{ const el=document.querySelector(`label[for="${fid}"]`); if(el) el.textContent=txt; };
+    setLabel('studentName',S.studentName_label); setLabel('gradeLevel',S.gradeLevel_label);
+    setLabel('contactNumber',S.contactNumber_label); setLabel('schoolName',S.schoolName_label);
+    setLabel('district',S.district_label); setLabel('coords',S.coords_label);
+    const withIcon=(id,text)=>{ const el=document.getElementById(id); if(el){ const ic=el.querySelector('i')?.outerHTML||''; const span=el.querySelector('span'); if(span){ span.textContent=text; } else { el.innerHTML=`${ic} ${text}`; } } };
+    withIcon('saveBtn',S.btn_save); withIcon('locateBtn',S.btn_locate); withIcon('resetBtn',S.btn_reset);
+    document.getElementById('saveBtn')?.setAttribute('aria-label', S.btn_save);
+    document.getElementById('locateBtn')?.setAttribute('aria-label', S.btn_locate);
+    document.getElementById('resetBtn')?.setAttribute('aria-label', S.btn_reset);
+    const phoneHint=document.getElementById('phoneHint'); if(phoneHint){ const ic=phoneHint.querySelector('i')?.outerHTML||''; phoneHint.innerHTML=`${ic} ${S.hint_phone}`; }
+    const schoolsHint=document.getElementById('schoolsHint'); if(schoolsHint){ const ic=schoolsHint.querySelector('i')?.outerHTML||''; schoolsHint.innerHTML=`${ic} ${S.hint_schools_default}`; }
+    const setPH=(id,txt)=>{ const el=document.getElementById(id); if(el) el.placeholder=txt; };
+    setPH('studentName',lang==='ar'?'مثال: محمد أحمد':'e.g., Mohammed Ahmed');
+    setPH('schoolName', lang==='ar'?'اكتب للبحث عن المدرسة…':'Type to search schools…');
+    setPH('coords',     S.coords_placeholder);
+    const contact=document.getElementById('contactNumber'); if(contact) contact.placeholder=(lang==='ar'?'05XXXXXXXX':'05XXXXXXXX');
+    const status=document.getElementById('status'); if(status){ const ic=status.querySelector('i')?.outerHTML||''; status.innerHTML=`${ic} ${S.status_fill_required}`; }
+    const langBtn=document.getElementById('langToggle'); if(langBtn){ const ic=langBtn.querySelector('i')?.outerHTML||'<i class="fas fa-globe"></i>'; langBtn.innerHTML = ic + ' ' + `<span id="btnLangText">${S.btn_lang_label}</span>`; }
+
+    // Buttons i18n (help/theme/lang + ARIA)
+    const helpBtnText = document.getElementById('btnHelpText'); if(helpBtnText){ helpBtnText.textContent = S.btn_help; }
+    const themeBtnText = document.getElementById('btnThemeText'); if(themeBtnText){ themeBtnText.textContent = S.btn_theme; }
+    const langBtnText = document.getElementById('btnLangText'); if(langBtnText){ langBtnText.textContent = S.btn_lang_label; }
+
+    const helpBtnEl = document.getElementById('helpBtn'); if(helpBtnEl){ helpBtnEl.setAttribute('aria-label', S.btn_help); }
+    const themeBtnEl = document.getElementById('themeToggle'); if(themeBtnEl){ themeBtnEl.setAttribute('aria-label', S.btn_theme); }
+    const langBtnEl = document.getElementById('langToggle'); if(langBtnEl){ langBtnEl.setAttribute('aria-label', S.btn_lang_label); }
+
+    // Overlay OK button
+    const okBtn = document.getElementById('closeSuccess'); if(okBtn){ const ic = okBtn.querySelector('i')?.outerHTML||''; okBtn.innerHTML = ic + ' ' + S.btn_ok; }
+
+
+    // Footer i18n
+    const fr = document.getElementById('footerRights'); if(fr){ fr.textContent = S.footer_rights; }
+    const fcl = document.getElementById('footerContactLabel'); if(fcl){ fcl.textContent = (S.footer_contact || 'Contact') + ':'; }
+
+    updateGradeLevels(lang);
+    updateSchoolsSelect(lang);
+    updateDistricts(lang);
+
+    try { renderHelp(lang); } catch(_){}
+  }
+  function toggleLang(){ setLang(currentLang==='ar'?'en':'ar'); }
+
+  function showToastLikeStatus(message, type="default"){
+    const status=document.getElementById("status"); if(!status) return;
+    status.textContent=message; status.className="pill";
+    if(type==="success"){ status.innerHTML=`<i class="fas fa-check-circle"></i> ${message}`; status.classList.add("success"); }
+    else if(type==="error"){ status.innerHTML=`<i class="fas fa-exclamation-circle"></i> ${message}`; status.classList.add("error"); }
+    else{ status.innerHTML=`<i class="fas fa-info-circle"></i> ${message}`; }
+  }
+  function isValidSaudiMobile(phone){ const cleaned=phone.replace(/\D/g,''); return /^(05|5)(5|0|3|6|4|9|1|8|7|2)([0-9]{7})$/.test(cleaned); }
+
+  
+function showSuccessFrame(){
+  const overlay = document.getElementById("successOverlay");
+  const S = STRINGS[currentLang];
+  overlay.querySelector(".thanks").textContent = S.success_thanks;
+  overlay.querySelector(".line1").textContent = S.success_line1;
+  overlay.querySelector(".brandText").textContent = S.success_brand;
+
+  // Hide the form card permanently after success
+  const card = document.querySelector(".card");
+  if (card) card.classList.add("hidden");
+
+  // Show thank-you overlay
+  overlay.classList.add("visible");
+
+  // Close button hides only the overlay; the form remains hidden
+  const closer = document.getElementById("closeSuccess");
+  if (closer) closer.onclick = ()=> window.close();
+}
+
+
+  let lastLat=null, lastLng=null;
+  function locateUserNoMap(){
+    const S=STRINGS[currentLang];
+    if(!navigator.geolocation){ showToastLikeStatus(S.geo_not_supported,"error"); return; }
+    showToastLikeStatus(S.locating);
+    navigator.geolocation.getCurrentPosition(pos=>{
+      const {latitude:lat, longitude:lng}=pos.coords;
+      lastLat=lat; lastLng=lng;
+      const coordsText=`${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+      const input=document.getElementById("coords");
+      input.value=coordsText;
+      input.dataset.url=`https://www.google.com/maps?q=${lat.toFixed(6)},${lng.toFixed(6)}`;
+      showToastLikeStatus(S.located_ok,"success"); checkFormCompletion();
+    },err=>{ showToastLikeStatus(STRINGS[currentLang].locate_error,"error"); console.error(err); },{enableHighAccuracy:true, timeout:10000, maximumAge:0});
+  }
+
+  function checkFormCompletion(){
+    const studentName=document.getElementById("studentName").value.trim();
+    const gradeLevel=document.getElementById("gradeLevel").value;
+    const contactRaw=document.getElementById("contactNumber").value.trim();
+    const schoolName=document.getElementById("schoolName").value.trim();
+    const otherSchool=document.getElementById("otherSchool")?.value.trim()||"";
+    const district=document.getElementById("district").value;
+    const otherDistrict=document.getElementById("otherDistrict")?.value.trim() || "";
+    const hasLocation=!!document.getElementById("coords").value;
+
+    const isDistrictValid = district!=="other" || (district==="other" && otherDistrict!=="");
+    const isSchoolValid = schoolName!=="" && (schoolName!=="other" || otherSchool!=="");
+
+    const isComplete = studentName && gradeLevel && contactRaw && 
+                      isSchoolValid && district && isDistrictValid && 
+                      isValidSaudiMobile(contactRaw) && hasLocation;
+
+    const saveBtn = document.getElementById("saveBtn");
+    saveBtn.disabled = !isComplete;
+
+    if(isComplete){
+      saveBtn.classList.add("active");
+    } else {
+      saveBtn.classList.remove("active");
+    }
+
+    return isComplete;
+  }
+  function validateForm(){
+    const S=STRINGS[currentLang];
+    let ok=true;
+    if(!checkFormCompletion()){ ok=false; showToastLikeStatus(S.status_fill_required,"error"); }
+    return ok;
+  }
+
+  function buildRecord(){
+    const now = new Date();
+    const locale = (currentLang==='ar' ? 'ar-EG' : 'en-US');
+    const dateLocal = now.toLocaleDateString(locale);
+    const time12 = now.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', hour12: true });
+
+    const gradeCode = document.getElementById("gradeLevel").value;
+    const gl = (["elem","inter","sec"].includes(gradeCode) ? ({"elem":0,"inter":1,"sec":2}[gradeCode]) : -1);
+    const gradeLabel = (gl>=0 ? (currentLang==='ar' ? ["الابتدائية","المتوسطة","الثانوية"][gl] : ["Elementary","Intermediate","Secondary"][gl]) : "");
+
+    const schoolLabel = document.getElementById("schoolName").value.trim();
+
+    const districtCode = document.getElementById("district").value;
+    let districtLabel = "";
+    if(districtCode === "other"){
+      districtLabel = (document.getElementById("otherDistrict").value || "").trim();
+    }else{
+      const d = districtsBilingual.find(x => x.code === districtCode);
+      districtLabel = d ? ((currentLang==='ar' ? d.ar : d.en) || d.code) : districtCode;
+    }
+
+    return {
+      dateLocal: dateLocal,
+      time12: time12,
+      timestamp: new Date().toISOString(),
+      lang: currentLang,
+      studentName: document.getElementById("studentName").value.trim(),
+      gradeLevel: gradeLabel,
+      gradeLevelCode: gradeCode,
+      contactNumber: document.getElementById("contactNumber").value.trim(),
+      schoolName: schoolLabel,
+      district: districtLabel,
+      districtCode: districtCode,
+      lat: lastLat, lng: lastLng,
+      mapsUrl: document.getElementById("coords").dataset.url || ""
+    };
+  }
+
+  async function saveRecord(){
+    const S=STRINGS[currentLang];
+    if(!validateForm()) return;
+    const record = buildRecord();
+
+    if (!GAS_ENDPOINT || GAS_ENDPOINT.includes("PUT_YOUR_GAS_WEBAPP_URL_HERE")){
+      showToastLikeStatus(S.save_check_only,"success");
+      showSuccessFrame();
+      setTimeout(resetForm, 1200);
+      return;
+    }
+    try{
+      document.getElementById("saveBtn").disabled=true;
+      showToastLikeStatus(S.saving);
+      const res=await fetch(GAS_ENDPOINT,{method:"POST", headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({action:"add_student", record})});
+      if(!res.ok) throw new Error(`HTTP ${res.status}`);
+      const text=await res.text();
+      let data; try{ data=JSON.parse(text); }catch(e){ if(text.includes("نجاح")||text.toLowerCase().includes("success")) data={ok:true}; else throw new Error(text || "Invalid response"); }
+      if(!data?.ok) throw new Error(data?.error || "save_failed");
+      showToastLikeStatus(S.saved,"success");
+      showSuccessFrame();
+      setTimeout(resetForm,2000);
+    }catch(err){
+      console.error("Save error:",err);
+      showToastLikeStatus(`${S.save_failed}: ${err.message}`,"error");
+    }finally{ document.getElementById("saveBtn").disabled=false; }
+  }
+
+  function resetForm(){
+    const S=STRINGS[currentLang];
+    document.getElementById("studentName").value="";
+    document.getElementById("gradeLevel").value="";
+    document.getElementById("contactNumber").value="";
+    document.getElementById("schoolName").value="";
+    document.getElementById("district").value="";
+    document.getElementById("otherDistrict").value="";
+    document.getElementById("coords").value="";
+    document.getElementById("coords").removeAttribute("data-url");
+    document.getElementById("otherDistrictContainer").classList.remove("visible");
+    lastLat=lastLng=null;
+    document.getElementById("saveBtn").disabled=true;
+    showToastLikeStatus(S.reset_done);
+    setTimeout(()=>showToastLikeStatus(S.status_fill_required),2000);
+  }
+
+  document.addEventListener("DOMContentLoaded", ()=>{
+    const root=document.documentElement;
+    const saved = localStorage.getItem("theme");
+    if(saved==="dark"){ root.classList.add("dark"); } else { root.classList.remove("dark"); }
+    const icon=document.getElementById("themeIcon");
+    const btn=document.getElementById("themeToggle");
+    const updateIcon=()=>{ if(!icon) return; icon.className = root.classList.contains("dark") ? "fas fa-sun" : "fas fa-moon"; };
+    updateIcon();
+    if(btn){
+      btn.addEventListener("click", ()=>{
+        root.classList.toggle("dark");
+        localStorage.setItem("theme", root.classList.contains("dark") ? "dark" : "light");
+        updateIcon();
+      });
+    }
+
+    setLang(localStorage.getItem("lang")||"ar");
+    updateGradeLevels(currentLang);
+    ensureDataLoaded();
+
+    document.getElementById("locateBtn").addEventListener("click", locateUserNoMap);
+    document.getElementById("saveBtn").addEventListener("click", saveRecord);
+    document.getElementById("resetBtn").addEventListener("click", resetForm);
+
+    ["#studentName","#gradeLevel","#contactNumber","#schoolName","#district","#otherDistrict"]
+      .forEach(sel => document.querySelector(sel)?.addEventListener("input", checkFormCompletion));
+
+    document.getElementById("schoolName").addEventListener("change", function(){
+      if(this.value==="other") document.getElementById("otherSchoolContainer").classList.add("visible");
+      else document.getElementById("otherSchoolContainer").classList.remove("visible");
+      checkFormCompletion();
+    });
+
+    document.getElementById("district").addEventListener("change", function(){
+      if(this.value==="other") document.getElementById("otherDistrictContainer").classList.add("visible");
+      else document.getElementById("otherDistrictContainer").classList.remove("visible");
+      checkFormCompletion();
+    });
+
+    document.getElementById("langToggle").addEventListener("click", ()=>toggleLang());
+    document.getElementById("closeSuccess").addEventListener("click", ()=> document.getElementById("successOverlay").classList.remove("visible"));
+
+    document.addEventListener("keypress", e=>{ if(e.key==="Enter"){ e.preventDefault(); saveRecord(); } });
+
+    checkFormCompletion();
+  });
+
+  /* Help Modal: Open/Close */
+  (function(){
+    const helpBtn = document.getElementById("helpBtn");
+    const modal = document.getElementById("helpModal");
+    const closeBtn = document.getElementById("closeHelp");
+    if (helpBtn && modal){
+      helpBtn.addEventListener("click", ()=>{ modal.style.display = "block"; modal.setAttribute("aria-hidden","false"); });
+      closeBtn?.addEventListener("click", ()=>{ modal.style.display = "none"; modal.setAttribute("aria-hidden","true"); });
+      window.addEventListener("click", (e)=>{ if(e.target === modal){ modal.style.display = "none"; modal.setAttribute("aria-hidden","true"); } });
+      window.addEventListener("keydown", (e)=>{ if(e.key === "Escape" && modal.style.display === "block"){ modal.style.display = "none"; modal.setAttribute("aria-hidden","true"); } });
+    }
+  })();
+
+  /* Help Modal: I18N + Tabs */
+  (function(){
+    function getCurrentLang(){
+      try { if (typeof currentLang !== 'undefined' && (currentLang==='ar' || currentLang==='en')) return currentLang; } catch(_){}
+      const docLang = document.documentElement.getAttribute('lang') || 'ar';
+      return (docLang.startsWith('en') ? 'en' : 'ar');
+    }
+
+    const HELP_I18N = {
+      ar: {
+        title: "تعليمات الاستخدام",
+        tab_howto: "طريقة الاستخدام",
+        tab_faq: "الأسئلة الشائعة",
+        contact: "للتواصل",
+        howto: [
+          "أدخل اسم الطالب/ـة والمرحلة الدراسية.",
+          "أدخل رقم التواصل (10 أرقام تبدأ بـ 05).",
+          "اختر المدرسة من القائمة أو اختر <strong>أخرى</strong> وأدخل الاسم يدويًا.",
+          "اختر الحي من القائمة أو اختر <strong>أخرى</strong> وأدخل الاسم يدويًا.",
+          "اضغط <strong>تحديد الموقع</strong> للحصول على الإحداثيات.",
+          "سيُفعّل زر الإرسال بعد اكتمال الحقول وصحة الرقم وتحديد الموقع."
+        ],
+        faq: [
+          { q: "زر الإرسال غير مفعّل؟", a: "تأكد من تعبئة كل الحقول، صحة رقم الجوال، وتحديد الموقع." },
+          { q: "لا تظهر المدارس/الأحياء؟", a: "قد يكون الاتصال بمصدر البيانات متعطل. نعرض بيانات افتراضية مؤقتًا حتى يعود الاتصال." },
+          { q: "لا أجد مدرستي بالقائمة", a: "اختر خيار <strong>أخرى</strong> وأدخل اسم المدرسة يدويًا." }
+        ]
+      },
+      en: {
+        title: "How to Use",
+        tab_howto: "How-To",
+        tab_faq: "FAQ",
+        contact: "Contact",
+        howto: [
+          "Enter the student name and grade level.",
+          "Enter the phone number (10 digits starting with 05).",
+          "Pick the school from the list, or choose <strong>Other</strong> and type it manually.",
+          "Pick the district from the list, or choose <strong>Other</strong> and type it manually.",
+          "Click <strong>Locate</strong> to capture coordinates.",
+          "Submit button is enabled only when all fields are valid and location is set."
+        ],
+        faq: [
+          { q: "Submit is disabled?", a: "Make sure all fields are filled, phone is valid, and location is set." },
+          { q: "Schools/Districts not loading?", a: "Data source may be down. We show temporary fallback until it recovers." },
+          { q: "Can't find my school", a: "Choose <strong>Other</strong> and type the school name manually." }
+        ]
+      }
+    };
+
+    function renderHelp(lang){
+      const dict = HELP_I18N[lang] || HELP_I18N.ar;
+      const t = (k)=> dict[k] || k;
+      document.querySelectorAll('[data-i18n="title"]').forEach(el=> el.textContent = t('title'));
+      document.querySelectorAll('[data-i18n="tab_howto"]').forEach(el=> el.textContent = t('tab_howto'));
+      document.querySelectorAll('[data-i18n="tab_faq"]').forEach(el=> el.textContent = t('tab_faq'));
+      document.querySelectorAll('[data-i18n="contact"]').forEach(el=> el.textContent = t('contact'));
+
+      const ul = document.getElementById('howtoList');
+      if (ul){ ul.innerHTML = dict.howto.map(item => '<li>'+ item +'</li>').join(''); }
+      const faq = document.getElementById('faqList');
+      if (faq){ faq.innerHTML = dict.faq.map(x => '<div class="qa"><div class="q">• ' + x.q + '</div><div class="a">' + x.a + '</div></div>').join(''); }
+    }
+
+    function initHelpTabs(){
+      const modal = document.getElementById('helpModal');
+      if (!modal) return;
+      const btns = modal.querySelectorAll('.tab-btn');
+      const panels = modal.querySelectorAll('.tab-panel');
+      btns.forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const to = btn.getAttribute('data-tab');
+          btns.forEach(b=> b.classList.toggle('tab-active', b===btn));
+          panels.forEach(p=> p.style.display = (p.getAttribute('data-panel')===to ? 'block' : 'none'));
+        });
+      });
+    }
+
+    (function wireModal(){
+      const helpBtn = document.getElementById('helpBtn');
+      const modal = document.getElementById('helpModal');
+      const closeBtn = document.getElementById('closeHelp');
+      if (helpBtn && modal){
+        initHelpTabs();
+        helpBtn.addEventListener('click', ()=>{
+          const lang = (typeof currentLang!=='undefined') ? currentLang : (document.documentElement.lang || 'ar');
+          renderHelp(lang);
+          modal.style.display = 'block';
+          modal.setAttribute('aria-hidden','false');
+        });
+        closeBtn?.addEventListener('click', ()=>{ modal.style.display = 'none'; modal.setAttribute('aria-hidden','true'); } );
+        window.addEventListener('click', (e)=>{ if(e.target === modal){ modal.style.display = 'none'; modal.setAttribute('aria-hidden','true'); } });
+        window.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && modal.style.display==='block'){ modal.style.display='none'; modal.setAttribute('aria-hidden','true'); } });
+      }
+    })();
+
+    window.renderHelp = renderHelp;
+  })();
+
+// إخفاء Splash بعد تحميل الصفحة
+window.addEventListener("load", () => {
+  const splash = document.getElementById("customSplash");
+  if(splash){
+    setTimeout(()=> splash.style.display = "none", 3000);
+  }
+});
+
+
+// Install Prompt
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  const installBtn = document.createElement('button');
+  installBtn.textContent = "📲 ثبّت التطبيق";
+  installBtn.className = "btn";
+  installBtn.style.position = "fixed";
+  installBtn.style.bottom = "80px";
+  installBtn.style.insetInline = "20px";
+  installBtn.style.zIndex = "1000";
+  document.body.appendChild(installBtn);
+
+  installBtn.addEventListener('click', () => {
+    installBtn.style.display = 'none';
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => deferredPrompt = null);
+  });
+});
+
+</script>
+
+  <button id="backToTop" title="العودة لأعلى"><i class="fas fa-arrow-up"></i></button>
+
+<script>
+// زر العودة لأعلى
+(function(){
+  const btn = document.getElementById('backToTop');
+  if(btn){
+    window.addEventListener('scroll', () => {
+      const sc = document.documentElement.scrollTop || document.body.scrollTop;
+      btn.style.display = (sc > 200 ? 'block' : 'none');
+    });
+    btn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+  }
+})();
+
+// تسجيل Service Worker
+(function(){
+  if ('serviceWorker' in navigator){
+    navigator.serviceWorker.register('service-worker.js')
+      .then(()=>console.log('Service Worker registered ✅'))
+      .catch(e=>console.warn('SW register failed:', e));
+  }
+})();
+
+// إخفاء Splash بعد تحميل الصفحة
+window.addEventListener("load", () => {
+  const splash = document.getElementById("customSplash");
+  if(splash){
+    setTimeout(()=> splash.style.display = "none", 3000);
+  }
+});
+
+
+// Install Prompt
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  const installBtn = document.createElement('button');
+  installBtn.textContent = "📲 ثبّت التطبيق";
+  installBtn.className = "btn";
+  installBtn.style.position = "fixed";
+  installBtn.style.bottom = "80px";
+  installBtn.style.insetInline = "20px";
+  installBtn.style.zIndex = "1000";
+  document.body.appendChild(installBtn);
+
+  installBtn.addEventListener('click', () => {
+    installBtn.style.display = 'none';
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => deferredPrompt = null);
+  });
+});
+
+</script>
+
+</div>
+
+<script>
+(function(){
+  function isInstalled(){
+    return window.matchMedia('(display-mode: standalone)').matches ||
+           window.navigator.standalone ||
+           localStorage.getItem('pwa_installed') === '1';
+  }
+  const overlay = document.getElementById('installOverlay');
+  const appRoot = document.getElementById('appRoot');
+  const installBtn = document.getElementById('installBtn');
+  let deferredPrompt = null;
+
+  if(isInstalled()){
+    if(overlay) overlay.style.display='none';
+    if(appRoot) appRoot.style.display='block';
+  }
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if(!isInstalled()){
+      if(overlay) overlay.style.display='flex';
+      if(appRoot) appRoot.style.display='none';
+    }
+  });
+
+  if(installBtn){
+    installBtn.addEventListener('click', () => {
+      if(deferredPrompt){
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choice) => {
+          if(choice && choice.outcome === 'accepted'){
+            try{ localStorage.setItem('pwa_installed','1'); }catch{}
+          }
+          if(overlay) overlay.style.display='none';
+          if(appRoot) appRoot.style.display='block';
+          deferredPrompt = null;
+        });
+      } else {
+        if(overlay) overlay.style.display='none';
+        if(appRoot) appRoot.style.display='block';
+      }
+    });
+  }
+
+  window.addEventListener('appinstalled', () => {
+    try{ localStorage.setItem('pwa_installed','1'); }catch{}
+    if(overlay) overlay.style.display='none';
+    if(appRoot) appRoot.style.display='block';
+  });
+})();
+</script>
+
+</body>
+</html>
