@@ -65,12 +65,16 @@
       position:sticky; top:calc(var(--safe-top) + .5rem);
       z-index:2; background:var(--card);
       box-shadow:0 1px 0 var(--line);
-    }
-    .section-subtitle{ color:var(--muted); font-weight:600; font-size:.98rem; margin-top:.25rem; text-align:center; } 
-    .section-title-wrap
+      flex-direction: column;
+  text-align: center;
+}
+    .section-subtitle{ color: #d97706; font-weight:600; font-size:.98rem; margin-top:.25rem; text-align:center; } 
+    .section-title-wrap {
       display:flex; align-items:center; justify-content:center;
       padding:.8rem 1rem .6rem; margin:0 .6rem 1rem; position:relative;
-    }
+      flex-direction: column;
+  text-align: center;
+}
     .section-title{
       color:var(--text-strong);
       font-size:clamp(1.25rem,2.6vw,1.7rem); font-weight:800;
@@ -211,16 +215,30 @@
   color: var(--brand);
 }
 
+
+
+
+
+#helpModal .actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
 </style>
 <style>
 /* ===== Override: make main header non-sticky ===== */
 header{ position:relative !important; top:auto !important; z-index:auto !important; box-shadow:none !important; }
 /* Keep only inner section title sticky */
-.section-title-wrap{ position:sticky !important; top:.5rem !important; z-index:5 !important; background:var(--card); box-shadow:0 1px 0 var(--line); }
+.section-title-wrap{ position:sticky !important; top:.5rem !important; z-index:5 !important; background:var(--card); box-shadow:0 1px 0 var(--line);   flex-direction: column;
+  text-align: center;
+}
 </style>
 <style>
 /* ===== Override: remove sticky from section title as well ===== */
-.section-title-wrap{ position:relative !important; top:auto !important; z-index:auto !important; box-shadow:none !important; }
+.section-title-wrap{ position:relative !important; top:auto !important; z-index:auto !important; box-shadow:none !important;   flex-direction: column;
+  text-align: center;
+}
 </style>
 <style>
 /* === Simplified Dark Footer === */
@@ -403,8 +421,7 @@ header{ position:relative !important; top:auto !important; z-index:auto !importa
   <header>
     <div class="header-content">
       <h1>
-        
-        تحديد موقع الطالب/ ـة
+        مشروع النقل المدرسي بالعلا
         <span class="build-tag"></span>
       </h1>
     </div>
@@ -427,8 +444,11 @@ header{ position:relative !important; top:auto !important; z-index:auto !importa
       <div class="card-body">
         <!-- Improved centered form title -->
         <div class="section-title-wrap">
-          <h2 class="section-title"><i class="fas fa-user-graduate"></i> <span id="formTitle">نموذج إدخال بيانات/span></h2>
-          <div class="section-subtitle" id="formSubtitle">يرجى تعبئة البيانات ثم تحديد الموقع قبل الإرسال</div>
+          <h2 class="section-title">
+            <i class="fas fa-user-graduate"></i>
+            <span id="formTitle">نموذج إدخال بيانات</span>
+          </h2>
+          <p class="section-subtitle" id="formSubtitle">يرجى تعبئة البيانات ثم تحديد الموقع قبل الإرسال</p>
         </div>
 
         <div class="row">
@@ -504,7 +524,7 @@ header{ position:relative !important; top:auto !important; z-index:auto !importa
   <!-- Help Modal -->
   <div id="helpModal" class="modal" aria-hidden="true">
     <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
-      <button id="closeHelp" class="close" aria-label="إغلاق">&times;</button>
+      
       <h2 id="helpTitle" class="modal-title" data-i18n="title">تعليمات الاستخدام</h2>
 
       <div class="tabs">
@@ -517,11 +537,7 @@ header{ position:relative !important; top:auto !important; z-index:auto !importa
           <!-- سيُعاد توليد العناصر حسب اللغة عبر renderHelp() -->
         </ul>
         <hr/>
-        <div class="help-contact">
-          <p><strong data-i18n="contact">للتواصل</strong></p>
-          <p><a href="tel:+966550463371"><span id="footerPhoneTxt">+966550463371</span></a></p>
-          <p><a href="mailto:albalawiaa@seitco.com.sa"><span id="footerEmailTxt">albalawiaa@seitco.com.sa</span></a></p>
-        </div>
+        
       </div>
 
       <div class="tab-panel" data-panel="faq" style="display:none;">
@@ -1127,6 +1143,15 @@ window.addEventListener("load", () => {
   const splash = document.getElementById("customSplash");
   if(splash){
     setTimeout(()=> splash.style.display = "none", 3000);
+  }
+});
+
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  const modal = document.getElementById("helpModal");
+  if(modal){
+    modal.style.display = "block";
+    modal.setAttribute("aria-hidden","false");
   }
 });
 
