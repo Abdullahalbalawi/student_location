@@ -186,7 +186,7 @@
     #faqList .a{ color:var(--text); margin:.2rem 0 0 .2rem; }
 
     /* Footer */
-    .app-footer{ margin:1rem auto 1.2rem; padding:.8rem 1rem; max-width:1200px; width:100%; text-align:center; color:var(--muted); }
+    .app-
     .app-footer .contact{ margin-top:.35rem; }
     .app-footer a{ color:inherit; text-decoration:underline dotted; }
     .app-footer a:hover{ text-decoration:underline; }
@@ -225,6 +225,38 @@
   justify-content: center;
 }
 
+
+
+
+
+.card, footer {
+  border-radius: 1rem;
+  margin: 1rem auto;
+  padding: 1.5rem;
+  max-width: 800px;
+  width: 90%;
+  box-sizing: border-box;
+}
+
+footer {
+  background: #1f1f1f;
+  color: #fff;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .card, footer {
+    width: 95%;
+    padding: 1rem;
+  }
+  .section-title {
+    font-size: 1.2rem;
+  }
+  .section-subtitle {
+    font-size: .9rem;
+  }
+}
+
 </style>
 <style>
 /* ===== Override: make main header non-sticky ===== */
@@ -242,13 +274,7 @@ header{ position:relative !important; top:auto !important; z-index:auto !importa
 </style>
 <style>
 /* === Simplified Dark Footer === */
-.app-footer {
-  background: #222;
-  color: #eee;
-  padding: 1.2rem .8rem;
-  text-align: center;
-  font-size: .9rem;
-}
+.app-
 .app-footer a {
   color: #ffd800;
   text-decoration: none;
@@ -421,7 +447,7 @@ header{ position:relative !important; top:auto !important; z-index:auto !importa
   <header>
     <div class="header-content">
       <h1>
-        مشروع النقل المدرسي بالعلا
+      تحديد موقع الطالب/ ـة
         <span class="build-tag"></span>
       </h1>
     </div>
@@ -516,8 +542,13 @@ header{ position:relative !important; top:auto !important; z-index:auto !importa
         <p><i class="fas fa-envelope"></i> albalawiaa@seitco.com.sa</p>
       </div>
       <div class="actions">
-        <button type="button" class="btn" id="closeSuccess"><i class="fas fa-check"></i> OK</button>
-      </div>
+  <button type="button" class="btn secondary" id="newRecord">
+    <i class="fas fa-plus"></i> تسجيل جديد
+  </button>
+  <button type="button" class="btn" id="closeSuccess">
+    <i class="fas fa-check"></i> إغلاق
+  </button>
+</div>
     </div>
   </div>
 
@@ -769,7 +800,7 @@ const $ = (s)=>document.querySelector(s);
   } catch(e) {}
     currentLang = lang; localStorage.setItem("lang", lang); setDirByLang(lang);
     const S = STRINGS[lang];
-    const h1=document.querySelector('h1'); if(h1){ const bus=h1.querySelector('.bus-icon')?.outerHTML||''; h1.innerHTML=`${bus} ${S.app_title} <span class="build-tag"></span>`; }
+    const headerH1=document.querySelector('header h1'); if(headerH1){ const bus=headerH1.querySelector('.bus-icon')?.outerHTML||''; headerH1.innerHTML=`${bus} ${S.app_title} <span class="build-tag"></span>`; }
     const st=document.getElementById('formTitle'); if(st){ st.textContent = S.section_student_info; }
     const sst=document.getElementById('formSubtitle'); if(sst){ sst.textContent = S.section_student_subtitle; }
     const setLabel=(fid,txt)=>{ const el=document.querySelector(`label[for="${fid}"]`); if(el) el.textContent=txt; };
@@ -1152,6 +1183,24 @@ document.addEventListener("DOMContentLoaded", ()=>{
   if(modal){
     modal.style.display = "block";
     modal.setAttribute("aria-hidden","false");
+  }
+});
+
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  const newBtn = document.getElementById("newRecord");
+  const closeBtn = document.getElementById("closeSuccess");
+  if(newBtn){
+    newBtn.addEventListener("click", ()=>{
+      document.getElementById("successOverlay").classList.remove("visible");
+      const card = document.querySelector(".card");
+      if(card) card.classList.remove("hidden");
+    });
+  }
+  if(closeBtn){
+    closeBtn.addEventListener("click", ()=>{
+      window.close(); // يغلق النافذة بالكامل
+    });
   }
 });
 
