@@ -269,6 +269,15 @@ footer {
   text-align: center;
 }
 
+
+@media (max-width: 768px) {
+  .select2-container { width: 100% !important; }
+  .select2-container .select2-selection--single { min-height: 44px; }
+  .select2-container .select2-selection__rendered { line-height: 44px; }
+  .select2-container .select2-selection__arrow { height: 44px; }
+  .select2-container .select2-search__field { font-size: 1rem; padding: .6rem; }
+}
+
 </style>
 <style>
 /* ===== Override: make main header non-sticky ===== */
@@ -460,21 +469,11 @@ document.addEventListener("DOMContentLoaded", ()=>{
   }
 
   if($("#schoolName").length){
-    $("#schoolName").select2({
-      width: '100%',
-      minimumResultsForSearch: 0,
-      dir: (document.documentElement.lang==='ar'?'rtl':'ltr'),
-      matcher: matchCustom
-    });
+    $("#schoolName").select2({ width: '100%', minimumResultsForSearch: 0, dropdownParent: $('body'), dir: (document.documentElement.lang==='ar'?'rtl':'ltr'), matcher: matchCustom });
   }
 
   if($("#district").length){
-    $("#district").select2({
-      width: '100%',
-      minimumResultsForSearch: 0,
-      dir: (document.documentElement.lang==='ar'?'rtl':'ltr'),
-      matcher: matchCustom
-    });
+    $("#district").select2({ width: '100%', minimumResultsForSearch: 0, dropdownParent: $('body'), dir: (document.documentElement.lang==='ar'?'rtl':'ltr'), matcher: matchCustom });
   }
 });
 
