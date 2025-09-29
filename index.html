@@ -61,25 +61,10 @@
     .theme-switch:hover, .lang-switch:hover, .btn-secondary:hover{background:#fff3; border-color: var(--brand); color:var(--text-strong);}
 
     /* ===== Improved section title placement ===== */
-    .section-title-wrap{
-      position:sticky; top:calc(var(--safe-top) + .5rem);
-      z-index:2; background:var(--card);
-      box-shadow:0 1px 0 var(--line);
-      flex-direction: column;
-  text-align: center;
-}
-    .section-subtitle{ color: #d97706; font-weight:600; font-size:.98rem; margin-top:.25rem; text-align:center; } 
-    .section-title-wrap {
-      display:flex; align-items:center; justify-content:center;
-      padding:.8rem 1rem .6rem; margin:0 .6rem 1rem; position:relative;
-      flex-direction: column;
-  text-align: center;
-}
-    .section-title{
-      color:var(--text-strong);
-      font-size:clamp(1.25rem,2.6vw,1.7rem); font-weight:800;
-      display:flex; align-items:center; gap:.6rem;
-    }
+    
+     
+    
+    
     .section-title-wrap::after{
       content:""; position:absolute; inset-inline:0; bottom:-.2rem; height:2px; background:var(--line);
       margin:0 .4rem;
@@ -249,12 +234,39 @@ footer {
     width: 95%;
     padding: 1rem;
   }
-  .section-title {
-    font-size: 1.2rem;
-  }
-  .section-subtitle {
-    font-size: .9rem;
-  }
+  
+  
+}
+
+
+.section-title-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: .8rem 1rem .6rem;
+  margin: 0 .6rem 1rem;
+  position: relative;
+  text-align: right;
+}
+
+.section-title {
+  color: var(--text-strong);
+  font-size: clamp(1.25rem, 2.6vw, 1.7rem);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  margin-bottom: .3rem;
+  justify-content: flex-start;
+}
+
+.section-subtitle {
+  color: #d97706;
+  font-weight: 600;
+  font-size: .98rem;
+  margin: 0;
+  text-align: center;
 }
 
 </style>
@@ -262,15 +274,11 @@ footer {
 /* ===== Override: make main header non-sticky ===== */
 header{ position:relative !important; top:auto !important; z-index:auto !important; box-shadow:none !important; }
 /* Keep only inner section title sticky */
-.section-title-wrap{ position:sticky !important; top:.5rem !important; z-index:5 !important; background:var(--card); box-shadow:0 1px 0 var(--line);   flex-direction: column;
-  text-align: center;
-}
+
 </style>
 <style>
 /* ===== Override: remove sticky from section title as well ===== */
-.section-title-wrap{ position:relative !important; top:auto !important; z-index:auto !important; box-shadow:none !important;   flex-direction: column;
-  text-align: center;
-}
+
 </style>
 <style>
 /* === Simplified Dark Footer === */
@@ -437,6 +445,42 @@ header{ position:relative !important; top:auto !important; z-index:auto !importa
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="apple-touch-icon" href="icon-192.png">
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js">
+document.addEventListener("DOMContentLoaded", ()=>{
+  function matchCustom(params, data) {
+    if ($.trim(params.term) === '') {
+      return data;
+    }
+    const term = params.term.toLowerCase();
+    const text = (data.text || "").toLowerCase();
+    if (text.indexOf(term) > -1) {
+      return data;
+    }
+    return null;
+  }
+
+  if($("#schoolName").length){
+    $("#schoolName").select2({
+      width: '100%',
+      minimumResultsForSearch: 0,
+      dir: (document.documentElement.lang==='ar'?'rtl':'ltr'),
+      matcher: matchCustom
+    });
+  }
+
+  if($("#district").length){
+    $("#district").select2({
+      width: '100%',
+      minimumResultsForSearch: 0,
+      dir: (document.documentElement.lang==='ar'?'rtl':'ltr'),
+      matcher: matchCustom
+    });
+  }
+});
+
+</script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
 <body>
 <div id="customSplash">
