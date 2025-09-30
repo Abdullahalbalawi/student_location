@@ -24,7 +24,7 @@
       --text-strong:#eaf2ff; --text:#e5eef7; --muted:#a6b2c4;
     }
     *{box-sizing:border-box; margin:0; padding:0;}
-    html,body{height:100%;}
+    html,body { background: #FBB917; transition: background 0.6s ease, color 0.4s ease; }
     body{
       background:linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%);
       color:var(--text);
@@ -667,7 +667,127 @@
     .app-footer i {
       color: var(--brand);
     }
-  </style>
+  
+    .header-content .bus-icon {
+      font-size: 3rem;
+      color: #1f2937; /* أيقونة بلون داكن */
+      background: #f2c94c; /* دائرة صفراء */
+      padding: 0.6rem;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    #customSplash .bus-icon {
+      animation: pulse 1.5s infinite ease-in-out;
+    }
+
+
+    .app-footer {
+      background: linear-gradient(135deg, #f2c94c, #e6b637);
+      color: #1f2937;
+      padding: 2rem 1rem;
+      text-align: center;
+      margin-top: 2rem;
+      border-radius: 1rem 1rem 0 0;
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.12);
+    }
+    .app-footer .footer-rights {
+      font-size: 0.9rem;
+      color: #333;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .footer-contact, .footer-social {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .footer-contact a, .footer-social a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #fff;
+      color: #1f2937;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+    .footer-contact a:hover, .footer-social a:hover {
+      background: #1f2937;
+      color: #f2c94c;
+      transform: translateY(-3px);
+    }
+
+
+    .app-footer .footer-dev {
+      font-size: 0.8rem;
+      color: #444;
+      margin-top: 0.5rem;
+      opacity: 0.85;
+    }
+
+
+    :root.dark .app-footer {
+      background: linear-gradient(135deg, #1f2937, #0f172a);
+      color: #f2f2f2;
+    }
+    :root.dark .app-footer .footer-rights {
+      color: #ddd;
+    }
+    :root.dark .footer-contact a,
+    :root.dark .footer-social a {
+      background: #2d3748;
+      color: #f2f2f2;
+    }
+    :root.dark .footer-contact a:hover,
+    :root.dark .footer-social a:hover {
+      background: #f2c94c;
+      color: #1f2937;
+    }
+    :root.dark .app-footer .footer-dev {
+      color: #bbb;
+    }
+
+
+    /* انتقال سلس بين الوضعين للفوتر */
+    .app-footer, .app-footer * {
+      transition: all 0.4s ease;
+    }
+
+    /* تحسين خلفية نموذج الإدخال */
+    .card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(8px);
+    }
+    :root.dark .card {
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(8px);
+    }
+
+
+    body {
+      transition: background 0.6s ease, color 0.4s ease;
+    }
+    :root.dark body {
+      background: linear-gradient(160deg, #0f172a, #1e293b);
+      color: #e5e7eb;
+    }
+
+</style>
   
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f2c94c">
@@ -680,18 +800,22 @@
 </head>
 <body>
 <div id="customSplash">
-  <img src="icon-192.png" alt="App Icon">
+  
+  <i class="fas fa-bus bus-icon" style="font-size:3rem; color:#1f2937; background:#f2c94c; padding:0.6rem; border-radius:50%; box-shadow:0 4px 12px rgba(0,0,0,0.2);"></i>
+
   <h1>مشروع النقل المدرسي بالعلا</h1>
 </div>
 
   <header>
-    <div class="header-content">
+    
+    <div class="header-content" style="flex-direction: column; gap: 0.4rem; text-align:center;">
+      <i class="fas fa-bus bus-icon"></i>
       <h1>
-        <i class="fas fa-bus bus-icon"></i>
         تحديد موقع الطالب/ ـة
         <span class="build-tag"></span>
       </h1>
     </div>
+
   </header>
 
   <main class="container">
@@ -812,19 +936,24 @@
     </div>
   </div>
 
+  
   <footer class="app-footer">
-    <div class="footer-inner">
-      <p class="footer-rights"><span id="footerRights">نظام تحديد موقع الطالب - جميع الحقوق محفوظة © 2025</span></p>
-      <div class="footer-contact">
-        <a href="mailto:albalawiaa@seitco.com.sa"><i class="fas fa-envelope"></i> <span id="footerEmailTxt">albalawiaa@seitco.com.sa</span></a>
-        <a href="tel:+966550463371"><i class="fas fa-phone"></i> <span id="footerPhoneTxt">+966550463371</span></a>
-      </div>
-      <div class="footer-social">
-        <a href="https://wa.me/966550463371" target="_blank"><i class="fab fa-whatsapp"></i> <span id="footerWhatsTxt">واتساب</span></a>
-        <a href="https://maps.app.goo.gl/hSaoMcRPdhV5LbQ97" target="_blank"><i class="fas fa-location-dot"></i> <span id="footerMapTxt">الموقع</span></a>
-      </div>
+    <p class="footer-rights">
+      نظام تحديد موقع الطالب - جميع الحقوق محفوظة © 2025
+    </p>
+    <div class="footer-contact">
+      <a href="mailto:albalawiaa@seitco.com.sa" title="البريد"><i class="fas fa-envelope"></i></a>
+      <a href="tel:+966550463371" title="الهاتف"><i class="fas fa-phone"></i></a>
     </div>
-  </footer>
+    <div class="footer-social">
+      <a href="https://wa.me/966550463371" target="_blank" title="واتساب"><i class="fab fa-whatsapp"></i></a>
+      <a href="https://maps.app.goo.gl/hSaoMcRPdhV5LbQ97" target="_blank" title="الموقع"><i class="fas fa-location-dot"></i></a>
+    </div>
+  
+    <p class="footer-dev">تم التطوير بواسطة عبدالله البلوي</p>
+
+</footer>
+
 
   <button id="backToTop" title="العودة لأعلى"><i class="fas fa-arrow-up"></i></button>
 
